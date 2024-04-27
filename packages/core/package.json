@@ -2,7 +2,18 @@
   "name": "@iic/core",
   "version": "1.0.0",
   "description": "",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
   "scripts": {
+    "build": "vite build",
+    "dev": "vite build --watch",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint \"**/*.{ts,js}\"",
     "lint:fix": "eslint \"**/*.{ts,js}\" --fix",
@@ -14,5 +25,10 @@
   "license": "Apache-2.0",
   "dependencies": {
     "typescript": "^5.4.5"
+  },
+  "devDependencies": {
+    "vite": "^5.2.10",
+    "vite-plugin-dts": "^3.9.0",
+    "vitest": "^1.5.2"
   }
 }
