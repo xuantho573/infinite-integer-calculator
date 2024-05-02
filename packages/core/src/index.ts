@@ -1,2 +1,3 @@
 import { Integer } from "./integer";
-export { Integer };
+import { calc } from "./parser";
+export { Integer, calc };
