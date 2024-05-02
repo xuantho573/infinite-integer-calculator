@@ -7,6 +7,7 @@ import {
   selectExpr,
   selectResult
 } from "../store";
+import backspace from '../assets/backspace.svg'
 
 interface ButtonArgs {
   value: string;
@@ -75,7 +76,7 @@ function Button(props: ButtonArgs) {
         ref={buttonRef}
       >
         {props.value === "D" ? (
-          <img src="/src/assets/backspace.svg" />
+          <img src={backspace} />
         ) : (
           props.value
         )}

@@ -17,13 +17,12 @@ export default function useKeyboardTriggerEvent(
         (!event.ctrlKey && props.ctrlKey)
       )
         return;
-
       if (
         event.key === props.value &&
         buttonRef.current !== undefined &&
         buttonRef.current !== null
       )
-        buttonRef.current.click();
+        (buttonRef.current as HTMLElement).click();
     }
 
     document.body.addEventListener("keydown", handleKeyPress);
