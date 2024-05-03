@@ -296,7 +296,9 @@ since it is left-shifted by 32 bits. We can also see that only the last 16 bits
 of the second summand affect the result digit, since it is left-shifted by 16
 bits. So the result digit will be equal to
 
-$$(low_1*low_2+((high_1*low_2+high_2*low_1)\mod 2^{16})*2^{16}+C)\mod 2^{32}$$
+$$
+(low_1 * low_2 + ((high_1 * low_2 + high_2 * low_1) \mod 2^{16}) * 2 ^ {16} + C) \mod 2 ^ {32}
+$$
 
 , where $C$ is the carry from the previous iteration, and the carry for the next
 iteration is equal to
