@@ -1,54 +1,55 @@
 import { expect, it } from "vitest";
 import { Integer } from "../src/integer";
+import { IntegerArray } from "../src/types";
 
 it("should add two small positive integers correctly", () => {
   expect(Integer.parse("0").add(Integer.parse("0"))).toEqual({
-    digits: new Uint32Array([0]),
+    digits: new IntegerArray([0]),
     negative: false
   });
 
   expect(Integer.parse("-0").add(Integer.parse("0"))).toEqual({
-    digits: new Uint32Array([0]),
+    digits: new IntegerArray([0]),
     negative: false
   });
 
   expect(Integer.parse("0").add(Integer.parse("-0"))).toEqual({
-    digits: new Uint32Array([0]),
+    digits: new IntegerArray([0]),
     negative: false
   });
 
   expect(Integer.parse("-0").add(Integer.parse("-0"))).toEqual({
-    digits: new Uint32Array([0]),
+    digits: new IntegerArray([0]),
     negative: false
   });
 
   expect(Integer.parse("18").add(Integer.parse("0"))).toEqual({
-    digits: new Uint32Array([18]),
+    digits: new IntegerArray([18]),
     negative: false
   });
 
   expect(Integer.parse("0").add(Integer.parse("11"))).toEqual({
-    digits: new Uint32Array([11]),
+    digits: new IntegerArray([11]),
     negative: false
   });
 
   expect(Integer.parse("18").add(Integer.parse("-0"))).toEqual({
-    digits: new Uint32Array([18]),
+    digits: new IntegerArray([18]),
     negative: false
   });
 
   expect(Integer.parse("-0").add(Integer.parse("11"))).toEqual({
-    digits: new Uint32Array([11]),
+    digits: new IntegerArray([11]),
     negative: false
   });
 
   expect(Integer.parse("18").add(Integer.parse("11"))).toEqual({
-    digits: new Uint32Array([29]),
+    digits: new IntegerArray([29]),
     negative: false
   });
 
   expect(Integer.parse(`${2 ** 30}`).add(Integer.parse(`${2 ** 31}`))).toEqual({
-    digits: new Uint32Array([3 * 2 ** 30]),
+    digits: new IntegerArray([0, 0, 0, 192]),
     negative: false
   });
 });
@@ -56,11 +57,11 @@ it("should add two small positive integers correctly", () => {
 it("should add multiple small positive integers correctly", () => {
   expect(
     Integer.parse("18").add(Integer.parse("11")).add(Integer.parse("2003"))
-  ).toEqual({ digits: new Uint32Array([2032]), negative: false });
+  ).toEqual({ digits: new IntegerArray([240, 7]), negative: false });
 
   expect(
     Integer.parse("05").add(Integer.parse("07")).add(Integer.parse("2003"))
-  ).toEqual({ digits: new Uint32Array([2015]), negative: false });
+  ).toEqual({ digits: new IntegerArray([223, 7]), negative: false });
 
   expect(
     Integer.parse("18")
@@ -69,33 +70,33 @@ it("should add multiple small positive integers correctly", () => {
       .add(Integer.parse("05"))
       .add(Integer.parse("07"))
       .add(Integer.parse("2003"))
-  ).toEqual({ digits: new Uint32Array([4047]), negative: false });
+  ).toEqual({ digits: new IntegerArray([207, 15]), negative: false });
 });
 
 it("should add two small negative integers correctly", () => {
   expect(Integer.parse("-18").add(Integer.parse("-11"))).toEqual({
-    digits: new Uint32Array([29]),
+    digits: new IntegerArray([29]),
     negative: true
   });
 
   expect(Integer.parse("-05").add(Integer.parse("-07"))).toEqual({
-    digits: new Uint32Array([12]),
+    digits: new IntegerArray([12]),
     negative: true
   });
 
   expect(
     Integer.parse(`-${2 ** 30}`).add(Integer.parse(`-${2 ** 31}`))
-  ).toEqual({ digits: new Uint32Array([3 * 2 ** 30]), negative: true });
+  ).toEqual({ digits: new IntegerArray([0, 0, 0, 192]), negative: true });
 });
 
 it("should add multiple small negative integers correctly", () => {
   expect(
     Integer.parse("-18").add(Integer.parse("-11")).add(Integer.parse("-2003"))
-  ).toEqual({ digits: new Uint32Array([2032]), negative: true });
+  ).toEqual({ digits: new IntegerArray([240, 7]), negative: true });
 
   expect(
     Integer.parse("-05").add(Integer.parse("-07")).add(Integer.parse("-2003"))
-  ).toEqual({ digits: new Uint32Array([2015]), negative: true });
+  ).toEqual({ digits: new IntegerArray([223, 7]), negative: true });
 
   expect(
     Integer.parse("-18")
@@ -104,14 +105,17 @@ it("should add multiple small negative integers correctly", () => {
       .add(Integer.parse("-05"))
       .add(Integer.parse("-07"))
       .add(Integer.parse("-2003"))
-  ).toEqual({ digits: new Uint32Array([4047]), negative: true });
+  ).toEqual({ digits: new IntegerArray([207, 15]), negative: true });
 });
 
 it("should add two large positive integers correctly", () => {
   expect(
     Integer.parse(`${2n ** 76n}`).add(Integer.parse(`${2n ** 340n}`))
   ).toEqual({
-    digits: new Uint32Array([0, 0, 4096, 0, 0, 0, 0, 0, 0, 0, 1048576]),
+    digits: new IntegerArray([
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16
+    ]),
     negative: false
   });
 
@@ -120,7 +124,7 @@ it("should add two large positive integers correctly", () => {
       Integer.parse("85250259285934732937")
     )
   ).toEqual({
-    digits: new Uint32Array([1215429412, 3724816654, 8]),
+    digits: new IntegerArray([36, 251, 113, 72, 14, 49, 4, 222, 8]),
     negative: false
   });
 
@@ -133,9 +137,10 @@ it("should add two large positive integers correctly", () => {
       )
     )
   ).toEqual({
-    digits: new Uint32Array([
-      219260785, 1130482261, 3718476559, 1521544400, 2426527137, 1342482570,
-      1759554429, 452154959, 1525087942, 1116513499, 5367
+    digits: new IntegerArray([
+      113, 167, 17, 13, 85, 202, 97, 67, 15, 115, 163, 221, 208, 236, 176, 90,
+      161, 221, 161, 144, 138, 168, 4, 80, 125, 171, 224, 104, 79, 86, 243, 26,
+      198, 254, 230, 90, 219, 164, 140, 66, 247, 20
     ]),
     negative: false
   });
@@ -149,10 +154,11 @@ it("should add two large positive integers correctly", () => {
       )
     )
   ).toEqual({
-    digits: new Uint32Array([
-      3967206986, 4200628871, 4123968884, 2004744291, 639398034, 2079818402,
-      3300202435, 2280982367, 1338596419, 2853929768, 2594478126, 615691412,
-      3446940090, 1125007689, 3906398993, 68297
+    digits: new IntegerArray([
+      74, 198, 118, 236, 135, 130, 96, 250, 116, 197, 206, 245, 99, 248, 125,
+      119, 146, 112, 28, 38, 162, 130, 247, 123, 195, 23, 181, 196, 95, 7, 245,
+      135, 67, 92, 201, 79, 40, 131, 27, 170, 46, 152, 164, 154, 148, 180, 178,
+      36, 186, 33, 116, 205, 73, 65, 14, 67, 17, 235, 214, 232, 201, 10, 1
     ]),
     negative: false
   });
@@ -164,7 +170,10 @@ it("should add multiple large positive integers correctly", () => {
       .add(Integer.parse(`${2n ** 340n}`))
       .add(Integer.parse(`${32456n * 2n ** 161n}`))
   ).toEqual({
-    digits: new Uint32Array([0, 0, 4096, 0, 0, 64912, 0, 0, 0, 0, 1048576]),
+    digits: new IntegerArray([
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 144, 253, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16
+    ]),
     negative: false
   });
 
@@ -175,7 +184,7 @@ it("should add multiple large positive integers correctly", () => {
       .add(Integer.parse("54510035744350657430"))
       .add(Integer.parse("65160031984897674294"))
   ).toEqual({
-    digits: new Uint32Array([793707835, 355895453, 18]),
+    digits: new IntegerArray([59, 5, 79, 47, 157, 136, 54, 21, 18]),
     negative: false
   });
 
@@ -194,9 +203,10 @@ it("should add multiple large positive integers correctly", () => {
         )
       )
   ).toEqual({
-    digits: new Uint32Array([
-      2096254193, 2841907528, 3455354659, 3228320259, 2696250089, 2899689177,
-      1884523250, 2592690077, 2634762986, 1375767273, 8992
+    digits: new IntegerArray([
+      241, 76, 242, 124, 72, 17, 100, 169, 35, 135, 244, 205, 3, 66, 108, 192,
+      233, 130, 181, 160, 217, 190, 213, 172, 242, 138, 83, 112, 157, 79, 137,
+      154, 234, 74, 11, 157, 233, 138, 0, 82, 32, 35
     ]),
     negative: false
   });
@@ -221,11 +231,12 @@ it("should add multiple large positive integers correctly", () => {
         )
       )
   ).toEqual({
-    digits: new Uint32Array([
-      735307800, 404433273, 1182083106, 3515461599, 234689721, 873080677,
-      1791117297, 3058979698, 2765831812, 1582256761, 1677311137, 4257020197,
-      676520420, 3209189807, 1473221855, 2996673888, 1197986738, 3781673180,
-      20011505
+    digits: new IntegerArray([
+      24, 232, 211, 43, 121, 41, 27, 24, 34, 40, 117, 70, 223, 175, 137, 209,
+      185, 20, 253, 13, 101, 39, 10, 52, 241, 71, 194, 106, 114, 83, 84, 182,
+      132, 62, 219, 164, 121, 82, 79, 94, 161, 188, 249, 99, 37, 249, 188, 253,
+      228, 225, 82, 40, 175, 89, 72, 191, 223, 148, 207, 87, 96, 157, 157, 178,
+      178, 211, 103, 71, 220, 192, 103, 225, 241, 89, 49, 1
     ]),
     negative: false
   });
@@ -235,7 +246,10 @@ it("should add two large negative integers correctly", () => {
   expect(
     Integer.parse(`-${2n ** 76n}`).add(Integer.parse(`-${2n ** 340n}`))
   ).toEqual({
-    digits: new Uint32Array([0, 0, 2 ** 12, 0, 0, 0, 0, 0, 0, 0, 2 ** 20]),
+    digits: new IntegerArray([
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16
+    ]),
     negative: true
   });
 
@@ -244,7 +258,7 @@ it("should add two large negative integers correctly", () => {
       Integer.parse("-85250259285934732937")
     )
   ).toEqual({
-    digits: new Uint32Array([1215429412, 3724816654, 8]),
+    digits: new IntegerArray([36, 251, 113, 72, 14, 49, 4, 222, 8]),
     negative: true
   });
 
@@ -257,9 +271,10 @@ it("should add two large negative integers correctly", () => {
       )
     )
   ).toEqual({
-    digits: new Uint32Array([
-      219260785, 1130482261, 3718476559, 1521544400, 2426527137, 1342482570,
-      1759554429, 452154959, 1525087942, 1116513499, 5367
+    digits: new IntegerArray([
+      113, 167, 17, 13, 85, 202, 97, 67, 15, 115, 163, 221, 208, 236, 176, 90,
+      161, 221, 161, 144, 138, 168, 4, 80, 125, 171, 224, 104, 79, 86, 243, 26,
+      198, 254, 230, 90, 219, 164, 140, 66, 247, 20
     ]),
     negative: true
   });
@@ -273,10 +288,11 @@ it("should add two large negative integers correctly", () => {
       )
     )
   ).toEqual({
-    digits: new Uint32Array([
-      3967206986, 4200628871, 4123968884, 2004744291, 639398034, 2079818402,
-      3300202435, 2280982367, 1338596419, 2853929768, 2594478126, 615691412,
-      3446940090, 1125007689, 3906398993, 68297
+    digits: new IntegerArray([
+      74, 198, 118, 236, 135, 130, 96, 250, 116, 197, 206, 245, 99, 248, 125,
+      119, 146, 112, 28, 38, 162, 130, 247, 123, 195, 23, 181, 196, 95, 7, 245,
+      135, 67, 92, 201, 79, 40, 131, 27, 170, 46, 152, 164, 154, 148, 180, 178,
+      36, 186, 33, 116, 205, 73, 65, 14, 67, 17, 235, 214, 232, 201, 10, 1
     ]),
     negative: true
   });
@@ -288,7 +304,10 @@ it("should add multiple large negative integers correctly", () => {
       .add(Integer.parse(`-${2n ** 340n}`))
       .add(Integer.parse(`-${32456n * 2n ** 161n}`))
   ).toEqual({
-    digits: new Uint32Array([0, 0, 2 ** 12, 0, 0, 64912, 0, 0, 0, 0, 2 ** 20]),
+    digits: new IntegerArray([
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 144, 253, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16
+    ]),
     negative: true
   });
 
@@ -299,7 +318,7 @@ it("should add multiple large negative integers correctly", () => {
       .add(Integer.parse("-54510035744350657430"))
       .add(Integer.parse("-65160031984897674294"))
   ).toEqual({
-    digits: new Uint32Array([793707835, 355895453, 18]),
+    digits: new IntegerArray([59, 5, 79, 47, 157, 136, 54, 21, 18]),
     negative: true
   });
 
@@ -318,9 +337,10 @@ it("should add multiple large negative integers correctly", () => {
         )
       )
   ).toEqual({
-    digits: new Uint32Array([
-      2096254193, 2841907528, 3455354659, 3228320259, 2696250089, 2899689177,
-      1884523250, 2592690077, 2634762986, 1375767273, 8992
+    digits: new IntegerArray([
+      241, 76, 242, 124, 72, 17, 100, 169, 35, 135, 244, 205, 3, 66, 108, 192,
+      233, 130, 181, 160, 217, 190, 213, 172, 242, 138, 83, 112, 157, 79, 137,
+      154, 234, 74, 11, 157, 233, 138, 0, 82, 32, 35
     ]),
     negative: true
   });
@@ -345,11 +365,12 @@ it("should add multiple large negative integers correctly", () => {
         )
       )
   ).toEqual({
-    digits: new Uint32Array([
-      735307800, 404433273, 1182083106, 3515461599, 234689721, 873080677,
-      1791117297, 3058979698, 2765831812, 1582256761, 1677311137, 4257020197,
-      676520420, 3209189807, 1473221855, 2996673888, 1197986738, 3781673180,
-      20011505
+    digits: new IntegerArray([
+      24, 232, 211, 43, 121, 41, 27, 24, 34, 40, 117, 70, 223, 175, 137, 209,
+      185, 20, 253, 13, 101, 39, 10, 52, 241, 71, 194, 106, 114, 83, 84, 182,
+      132, 62, 219, 164, 121, 82, 79, 94, 161, 188, 249, 99, 37, 249, 188, 253,
+      228, 225, 82, 40, 175, 89, 72, 191, 223, 148, 207, 87, 96, 157, 157, 178,
+      178, 211, 103, 71, 220, 192, 103, 225, 241, 89, 49, 1
     ]),
     negative: true
   });
@@ -357,51 +378,51 @@ it("should add multiple large negative integers correctly", () => {
 
 it("should add two small different sign integers correctly", () => {
   expect(Integer.parse("18112003").add(Integer.parse("-18112003"))).toEqual({
-    digits: new Uint32Array([0]),
+    digits: new IntegerArray([0]),
     negative: false
   });
 
   expect(Integer.parse("0").add(Integer.parse("-18112003"))).toEqual({
-    digits: new Uint32Array([18112003]),
+    digits: new IntegerArray([3, 94, 20, 1]),
     negative: true
   });
 
   expect(Integer.parse("-18112003").add(Integer.parse("0"))).toEqual({
-    digits: new Uint32Array([18112003]),
+    digits: new IntegerArray([3, 94, 20, 1]),
     negative: true
   });
 
   expect(Integer.parse("-05072003").add(Integer.parse("-0"))).toEqual({
-    digits: new Uint32Array([5072003]),
+    digits: new IntegerArray([131, 100, 77]),
     negative: true
   });
 
   expect(Integer.parse("-0").add(Integer.parse("-05072003"))).toEqual({
-    digits: new Uint32Array([5072003]),
+    digits: new IntegerArray([131, 100, 77]),
     negative: true
   });
 
   expect(Integer.parse("18112003").add(Integer.parse("-05072003"))).toEqual({
-    digits: new Uint32Array([13040000]),
+    digits: new IntegerArray([128, 249, 198]),
     negative: false
   });
 
   expect(Integer.parse("05072003").add(Integer.parse("-18112003"))).toEqual({
-    digits: new Uint32Array([13040000]),
+    digits: new IntegerArray([128, 249, 198]),
     negative: true
   });
 
   expect(
     Integer.parse(`${2 ** 30}`).add(Integer.parse(`${-(2 ** 31)}`))
   ).toEqual({
-    digits: new Uint32Array([2 ** 30]),
+    digits: new IntegerArray([0, 0, 0, 64]),
     negative: true
   });
 
   expect(
     Integer.parse(`${2 ** 31}`).add(Integer.parse(`${-(2 ** 30)}`))
   ).toEqual({
-    digits: new Uint32Array([2 ** 30]),
+    digits: new IntegerArray([0, 0, 0, 64]),
     negative: false
   });
 });
@@ -410,16 +431,17 @@ it("should add two large different sign integers correctly", () => {
   expect(
     Integer.parse(`-${2n ** 76n}`).add(Integer.parse(`${2n ** 76n}`))
   ).toEqual({
-    digits: new Uint32Array([0]),
+    digits: new IntegerArray([0]),
     negative: false
   });
 
   expect(
     Integer.parse(`${-(2n ** 76n)}`).add(Integer.parse(`${2n ** 340n}`))
   ).toEqual({
-    digits: new Uint32Array([
-      0, 0, 4294963200, 4294967295, 4294967295, 4294967295, 4294967295,
-      4294967295, 4294967295, 4294967295, 1048575
+    digits: new IntegerArray([
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 240, 255, 255, 255, 255, 255, 255, 255, 255,
+      255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+      255, 255, 255, 255, 255, 255, 255, 255, 255, 15
     ]),
     negative: false
   });
@@ -427,9 +449,10 @@ it("should add two large different sign integers correctly", () => {
   expect(
     Integer.parse(`${2n ** 76n}`).add(Integer.parse(`${-(2n ** 340n)}`))
   ).toEqual({
-    digits: new Uint32Array([
-      0, 0, 4294963200, 4294967295, 4294967295, 4294967295, 4294967295,
-      4294967295, 4294967295, 4294967295, 1048575
+    digits: new IntegerArray([
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 240, 255, 255, 255, 255, 255, 255, 255, 255,
+      255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+      255, 255, 255, 255, 255, 255, 255, 255, 255, 15
     ]),
     negative: true
   });
@@ -439,7 +462,7 @@ it("should add two large different sign integers correctly", () => {
       Integer.parse("-85250259285934732937")
     )
   ).toEqual({
-    digits: new Uint32Array([532279790, 1613190460]),
+    digits: new IntegerArray([238, 241, 185, 31, 60, 85, 39, 96]),
     negative: true
   });
 
@@ -448,7 +471,7 @@ it("should add two large different sign integers correctly", () => {
       Integer.parse("85250259285934732937")
     )
   ).toEqual({
-    digits: new Uint32Array([532279790, 1613190460]),
+    digits: new IntegerArray([238, 241, 185, 31, 60, 85, 39, 96]),
     negative: false
   });
 
@@ -461,9 +484,10 @@ it("should add two large different sign integers correctly", () => {
       )
     )
   ).toEqual({
-    digits: new Uint32Array([
-      520333473, 3940146323, 2280371864, 2907682727, 231191909, 629265381,
-      727233576, 97371990, 2286334609, 495612124, 476
+    digits: new IntegerArray([
+      161, 168, 3, 31, 147, 220, 217, 234, 152, 182, 235, 135, 167, 183, 79,
+      173, 101, 181, 199, 13, 229, 211, 129, 37, 40, 180, 88, 43, 86, 199, 205,
+      5, 145, 178, 70, 136, 220, 112, 138, 29, 220, 1
     ]),
     negative: false
   });
@@ -477,9 +501,10 @@ it("should add two large different sign integers correctly", () => {
       )
     )
   ).toEqual({
-    digits: new Uint32Array([
-      520333473, 3940146323, 2280371864, 2907682727, 231191909, 629265381,
-      727233576, 97371990, 2286334609, 495612124, 476
+    digits: new IntegerArray([
+      161, 168, 3, 31, 147, 220, 217, 234, 152, 182, 235, 135, 167, 183, 79,
+      173, 101, 181, 199, 13, 229, 211, 129, 37, 40, 180, 88, 43, 86, 199, 205,
+      5, 145, 178, 70, 136, 220, 112, 138, 29, 220, 1
     ]),
     negative: true
   });
@@ -493,10 +518,11 @@ it("should add two large different sign integers correctly", () => {
       )
     )
   ).toEqual({
-    digits: new Uint32Array([
-      3498841148, 926239997, 1676871269, 3646284905, 3052126673, 277092880,
-      2624733907, 3298709991, 1137090602, 2080946734, 2594476252, 615691412,
-      3446940090, 1125007689, 3906398993, 68297
+    digits: new IntegerArray([
+      60, 20, 140, 208, 253, 76, 53, 55, 101, 6, 243, 99, 105, 228, 85, 217,
+      209, 193, 235, 181, 16, 26, 132, 16, 211, 66, 114, 156, 231, 81, 158, 196,
+      42, 160, 198, 67, 46, 186, 8, 124, 220, 144, 164, 154, 148, 180, 178, 36,
+      186, 33, 116, 205, 73, 65, 14, 67, 17, 235, 214, 232, 201, 10, 1
     ]),
     negative: false
   });
@@ -510,10 +536,11 @@ it("should add two large different sign integers correctly", () => {
       )
     )
   ).toEqual({
-    digits: new Uint32Array([
-      3498841148, 926239997, 1676871269, 3646284905, 3052126673, 277092880,
-      2624733907, 3298709991, 1137090602, 2080946734, 2594476252, 615691412,
-      3446940090, 1125007689, 3906398993, 68297
+    digits: new IntegerArray([
+      60, 20, 140, 208, 253, 76, 53, 55, 101, 6, 243, 99, 105, 228, 85, 217,
+      209, 193, 235, 181, 16, 26, 132, 16, 211, 66, 114, 156, 231, 81, 158, 196,
+      42, 160, 198, 67, 46, 186, 8, 124, 220, 144, 164, 154, 148, 180, 178, 36,
+      186, 33, 116, 205, 73, 65, 14, 67, 17, 235, 214, 232, 201, 10, 1
     ]),
     negative: true
   });

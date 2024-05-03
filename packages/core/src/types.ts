@@ -1,6 +1,8 @@
+export class IntegerArray extends Uint8Array {}
+
 export interface IntegerInternal {
   negative: boolean;
-  digits: Readonly<Uint32Array>;
+  digits: Readonly<IntegerArray>;
 }
 
 export type Option<T> = Some<T> | None<T>;

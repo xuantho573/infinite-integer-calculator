@@ -1,90 +1,91 @@
 import { expect, it } from "vitest";
 import { Integer } from "../src/integer";
+import { IntegerArray } from "../src/types";
 
 it("should multiply two small positive integers correctly", () => {
   expect(Integer.parse("0").mul(Integer.parse("0"))).toEqual({
-    digits: new Uint32Array([0]),
+    digits: new IntegerArray([0]),
     negative: false
   });
 
   expect(Integer.parse("-0").mul(Integer.parse("0"))).toEqual({
-    digits: new Uint32Array([0]),
+    digits: new IntegerArray([0]),
     negative: false
   });
 
   expect(Integer.parse("0").mul(Integer.parse("-0"))).toEqual({
-    digits: new Uint32Array([0]),
+    digits: new IntegerArray([0]),
     negative: false
   });
 
   expect(Integer.parse("-0").mul(Integer.parse("-0"))).toEqual({
-    digits: new Uint32Array([0]),
+    digits: new IntegerArray([0]),
     negative: false
   });
 
   expect(Integer.parse("18").mul(Integer.parse("0"))).toEqual({
-    digits: new Uint32Array([0]),
+    digits: new IntegerArray([0]),
     negative: false
   });
 
   expect(Integer.parse("0").mul(Integer.parse("11"))).toEqual({
-    digits: new Uint32Array([0]),
+    digits: new IntegerArray([0]),
     negative: false
   });
 
   expect(Integer.parse("18").mul(Integer.parse("-0"))).toEqual({
-    digits: new Uint32Array([0]),
+    digits: new IntegerArray([0]),
     negative: false
   });
 
   expect(Integer.parse("-0").mul(Integer.parse("11"))).toEqual({
-    digits: new Uint32Array([0]),
+    digits: new IntegerArray([0]),
     negative: false
   });
 
   expect(Integer.parse("18").mul(Integer.parse("11"))).toEqual({
-    digits: new Uint32Array([198]),
+    digits: new IntegerArray([198]),
     negative: false
   });
 
   expect(Integer.parse("11").mul(Integer.parse("18"))).toEqual({
-    digits: new Uint32Array([198]),
+    digits: new IntegerArray([198]),
     negative: false
   });
 
   expect(Integer.parse(`${2 ** 30}`).mul(Integer.parse(`${2 ** 31}`))).toEqual({
-    digits: new Uint32Array([0, 2 ** 29]),
+    digits: new IntegerArray([0, 0, 0, 0, 0, 0, 0, 32]),
     negative: false
   });
 
   expect(Integer.parse(`${2 ** 31}`).mul(Integer.parse(`${2 ** 30}`))).toEqual({
-    digits: new Uint32Array([0, 2 ** 29]),
+    digits: new IntegerArray([0, 0, 0, 0, 0, 0, 0, 32]),
     negative: false
   });
 });
 
 it("should multiply two small negative integers correctly", () => {
   expect(Integer.parse("-18").mul(Integer.parse("-11"))).toEqual({
-    digits: new Uint32Array([198]),
+    digits: new IntegerArray([198]),
     negative: false
   });
 
   expect(Integer.parse("-05").mul(Integer.parse("-07"))).toEqual({
-    digits: new Uint32Array([35]),
+    digits: new IntegerArray([35]),
     negative: false
   });
 
   expect(
     Integer.parse(`-${2 ** 30}`).mul(Integer.parse(`-${2 ** 31}`))
   ).toEqual({
-    digits: new Uint32Array([0, 2 ** 29]),
+    digits: new IntegerArray([0, 0, 0, 0, 0, 0, 0, 32]),
     negative: false
   });
 
   expect(
     Integer.parse(`-${2 ** 31}`).mul(Integer.parse(`-${2 ** 30}`))
   ).toEqual({
-    digits: new Uint32Array([0, 2 ** 29]),
+    digits: new IntegerArray([0, 0, 0, 0, 0, 0, 0, 32]),
     negative: false
   });
 });
@@ -93,7 +94,11 @@ it("should multiply two large positive integers correctly", () => {
   expect(
     Integer.parse(`${2n ** 76n}`).mul(Integer.parse(`${2n ** 340n}`))
   ).toEqual({
-    digits: new Uint32Array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]),
+    digits: new IntegerArray([
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 1
+    ]),
     negative: false
   });
 
@@ -102,8 +107,8 @@ it("should multiply two large positive integers correctly", () => {
       Integer.parse("85250259285934732937")
     )
   ).toEqual({
-    digits: new Uint32Array([
-      778201331, 3590185775, 2894594215, 2670474244, 19
+    digits: new IntegerArray([
+      243, 104, 98, 46, 47, 227, 253, 213, 167, 0, 136, 172, 4, 52, 44, 159, 19
     ]),
     negative: false
   });
@@ -117,11 +122,12 @@ it("should multiply two large positive integers correctly", () => {
       )
     )
   ).toEqual({
-    digits: new Uint32Array([
-      820722344, 484574046, 3354378088, 4080220678, 1595431319, 4149578013,
-      3899153413, 1473883865, 2241047578, 969820436, 658116215, 465669652,
-      666558595, 1384793983, 3172696170, 949661335, 3128706758, 135654673,
-      776834415, 1712207566, 7145198
+    digits: new IntegerArray([
+      168, 58, 235, 48, 94, 3, 226, 28, 104, 191, 239, 199, 6, 58, 51, 243, 151,
+      89, 24, 95, 29, 137, 85, 247, 5, 92, 104, 232, 217, 174, 217, 87, 26, 172,
+      147, 133, 20, 73, 206, 57, 119, 14, 58, 39, 20, 142, 193, 27, 131, 224,
+      186, 39, 127, 71, 138, 82, 106, 128, 27, 189, 151, 174, 154, 56, 198, 70,
+      124, 186, 17, 237, 21, 8, 111, 141, 77, 46, 206, 54, 14, 102, 238, 6, 109
     ]),
     negative: false
   });
@@ -135,12 +141,14 @@ it("should multiply two large positive integers correctly", () => {
       )
     )
   ).toEqual({
-    digits: new Uint32Array([
-      212158421, 2067594408, 1631621007, 2967018581, 1013871850, 3540769630,
-      2896856124, 2706279794, 1508766822, 761347073, 3947275763, 1408622291,
-      1327034229, 1434917399, 1433769485, 844231308, 3869138296, 3187485559,
-      514451263, 2878756793, 668143114, 4213423210, 1984018297, 215227702,
-      677382824, 64001287
+    digits: new IntegerArray([
+      213, 71, 165, 12, 168, 252, 60, 123, 143, 143, 64, 97, 85, 28, 217, 176,
+      234, 116, 110, 60, 94, 219, 11, 211, 60, 132, 170, 172, 114, 141, 78, 161,
+      102, 244, 237, 89, 1, 60, 97, 45, 243, 165, 70, 235, 211, 222, 245, 83,
+      117, 239, 24, 79, 23, 26, 135, 85, 13, 150, 117, 85, 140, 242, 81, 50,
+      120, 93, 158, 230, 119, 43, 253, 189, 63, 231, 169, 30, 185, 87, 150, 171,
+      10, 14, 211, 39, 106, 188, 35, 251, 121, 183, 65, 118, 54, 29, 212, 12,
+      168, 10, 96, 40, 7, 149, 208, 3
     ]),
     negative: false
   });
@@ -154,15 +162,19 @@ it("should multiply two large positive integers correctly", () => {
       )
     )
   ).toEqual({
-    digits: new Uint32Array([
-      2174036276, 2104666059, 2498389441, 1202846322, 1340744145, 1242409416,
-      3157109218, 4054174589, 2003431879, 4008291282, 1262078785, 878242308,
-      74055091, 1478638995, 3638547992, 1751478687, 791067578, 1694668920,
-      1951720098, 2398782458, 2078493292, 2575711446, 3153466203, 1524266153,
-      3660134566, 2373440323, 3983989714, 2326184301, 103948648, 1060231770,
-      677904937, 1242297309, 3300688419, 4291114426, 13523980, 2326159986,
-      3454349916, 1236072008, 1463316279, 2201233176, 307541658, 2736762703,
-      3399493204, 35520995, 3417223143, 3847865090, 861084
+    digits: new IntegerArray([
+      52, 41, 149, 129, 203, 167, 114, 125, 193, 101, 234, 148, 114, 250, 177,
+      71, 209, 33, 234, 79, 200, 169, 13, 74, 226, 169, 45, 188, 125, 203, 165,
+      241, 199, 241, 105, 119, 210, 171, 233, 238, 65, 203, 57, 75, 4, 234, 88,
+      52, 179, 253, 105, 4, 147, 61, 34, 88, 24, 214, 223, 216, 159, 113, 101,
+      104, 186, 187, 38, 47, 120, 152, 2, 101, 162, 226, 84, 116, 250, 131, 250,
+      142, 108, 74, 227, 123, 214, 60, 134, 153, 91, 19, 246, 187, 169, 116,
+      218, 90, 166, 56, 41, 218, 67, 211, 119, 141, 210, 219, 118, 237, 109,
+      193, 166, 138, 104, 33, 50, 6, 90, 218, 49, 63, 41, 2, 104, 40, 221, 243,
+      11, 74, 35, 130, 188, 196, 186, 53, 197, 255, 12, 92, 206, 0, 114, 98,
+      166, 138, 92, 50, 229, 205, 72, 246, 172, 73, 55, 111, 56, 87, 24, 39, 52,
+      131, 154, 182, 84, 18, 79, 175, 31, 163, 84, 38, 160, 202, 227, 1, 30, 2,
+      231, 175, 174, 203, 2, 195, 89, 229, 156, 35, 13
     ]),
     negative: false
   });
@@ -172,7 +184,11 @@ it("should multiply two large negative integers correctly", () => {
   expect(
     Integer.parse(`-${2n ** 340n}`).mul(Integer.parse(`-${2n ** 76n}`))
   ).toEqual({
-    digits: new Uint32Array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]),
+    digits: new IntegerArray([
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 1
+    ]),
     negative: false
   });
 
@@ -181,8 +197,8 @@ it("should multiply two large negative integers correctly", () => {
       Integer.parse("-85250259285934732937")
     )
   ).toEqual({
-    digits: new Uint32Array([
-      778201331, 3590185775, 2894594215, 2670474244, 19
+    digits: new IntegerArray([
+      243, 104, 98, 46, 47, 227, 253, 213, 167, 0, 136, 172, 4, 52, 44, 159, 19
     ]),
     negative: false
   });
@@ -196,11 +212,12 @@ it("should multiply two large negative integers correctly", () => {
       )
     )
   ).toEqual({
-    digits: new Uint32Array([
-      820722344, 484574046, 3354378088, 4080220678, 1595431319, 4149578013,
-      3899153413, 1473883865, 2241047578, 969820436, 658116215, 465669652,
-      666558595, 1384793983, 3172696170, 949661335, 3128706758, 135654673,
-      776834415, 1712207566, 7145198
+    digits: new IntegerArray([
+      168, 58, 235, 48, 94, 3, 226, 28, 104, 191, 239, 199, 6, 58, 51, 243, 151,
+      89, 24, 95, 29, 137, 85, 247, 5, 92, 104, 232, 217, 174, 217, 87, 26, 172,
+      147, 133, 20, 73, 206, 57, 119, 14, 58, 39, 20, 142, 193, 27, 131, 224,
+      186, 39, 127, 71, 138, 82, 106, 128, 27, 189, 151, 174, 154, 56, 198, 70,
+      124, 186, 17, 237, 21, 8, 111, 141, 77, 46, 206, 54, 14, 102, 238, 6, 109
     ]),
     negative: false
   });
@@ -214,12 +231,14 @@ it("should multiply two large negative integers correctly", () => {
       )
     )
   ).toEqual({
-    digits: new Uint32Array([
-      212158421, 2067594408, 1631621007, 2967018581, 1013871850, 3540769630,
-      2896856124, 2706279794, 1508766822, 761347073, 3947275763, 1408622291,
-      1327034229, 1434917399, 1433769485, 844231308, 3869138296, 3187485559,
-      514451263, 2878756793, 668143114, 4213423210, 1984018297, 215227702,
-      677382824, 64001287
+    digits: new IntegerArray([
+      213, 71, 165, 12, 168, 252, 60, 123, 143, 143, 64, 97, 85, 28, 217, 176,
+      234, 116, 110, 60, 94, 219, 11, 211, 60, 132, 170, 172, 114, 141, 78, 161,
+      102, 244, 237, 89, 1, 60, 97, 45, 243, 165, 70, 235, 211, 222, 245, 83,
+      117, 239, 24, 79, 23, 26, 135, 85, 13, 150, 117, 85, 140, 242, 81, 50,
+      120, 93, 158, 230, 119, 43, 253, 189, 63, 231, 169, 30, 185, 87, 150, 171,
+      10, 14, 211, 39, 106, 188, 35, 251, 121, 183, 65, 118, 54, 29, 212, 12,
+      168, 10, 96, 40, 7, 149, 208, 3
     ]),
     negative: false
   });
@@ -227,52 +246,52 @@ it("should multiply two large negative integers correctly", () => {
 
 it("should multiply two small different sign integers correctly", () => {
   expect(Integer.parse("0").mul(Integer.parse("-18112003"))).toEqual({
-    digits: new Uint32Array([0]),
+    digits: new IntegerArray([0]),
     negative: false
   });
 
   expect(Integer.parse("-18112003").mul(Integer.parse("0"))).toEqual({
-    digits: new Uint32Array([0]),
+    digits: new IntegerArray([0]),
     negative: false
   });
 
   expect(Integer.parse("-05072003").mul(Integer.parse("-0"))).toEqual({
-    digits: new Uint32Array([0]),
+    digits: new IntegerArray([0]),
     negative: false
   });
 
   expect(Integer.parse("-0").mul(Integer.parse("-05072003"))).toEqual({
-    digits: new Uint32Array([0]),
+    digits: new IntegerArray([0]),
     negative: false
   });
 
   expect(Integer.parse("18112003").mul(Integer.parse("-05072003"))).toEqual({
-    digits: new Uint32Array([3373025161, 21388]),
+    digits: new IntegerArray([137, 71, 12, 201, 140, 83]),
     negative: true
   });
 
   expect(Integer.parse("05072003").mul(Integer.parse("-18112003"))).toEqual({
-    digits: new Uint32Array([3373025161, 21388]),
+    digits: new IntegerArray([137, 71, 12, 201, 140, 83]),
     negative: true
   });
 
   expect(Integer.parse(`${2 ** 30}`).mul(Integer.parse(`-${2 ** 31}`))).toEqual(
     {
-      digits: new Uint32Array([0, 2 ** 29]),
+      digits: new IntegerArray([0, 0, 0, 0, 0, 0, 0, 32]),
       negative: true
     }
   );
 
   expect(Integer.parse(`${2 ** 31}`).mul(Integer.parse(`-${2 ** 30}`))).toEqual(
     {
-      digits: new Uint32Array([0, 2 ** 29]),
+      digits: new IntegerArray([0, 0, 0, 0, 0, 0, 0, 32]),
       negative: true
     }
   );
 
   expect(Integer.parse(`-${2 ** 31}`).mul(Integer.parse(`${2 ** 30}`))).toEqual(
     {
-      digits: new Uint32Array([0, 2 ** 29]),
+      digits: new IntegerArray([0, 0, 0, 0, 0, 0, 0, 32]),
       negative: true
     }
   );
@@ -282,14 +301,22 @@ it("should multiply two large different sign integers correctly", () => {
   expect(
     Integer.parse(`-${2n ** 76n}`).mul(Integer.parse(`${2n ** 340n}`))
   ).toEqual({
-    digits: new Uint32Array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]),
+    digits: new IntegerArray([
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 1
+    ]),
     negative: true
   });
 
   expect(
     Integer.parse(`${2n ** 76n}`).mul(Integer.parse(`-${2n ** 340n}`))
   ).toEqual({
-    digits: new Uint32Array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]),
+    digits: new IntegerArray([
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 1
+    ]),
     negative: true
   });
 
@@ -298,8 +325,8 @@ it("should multiply two large different sign integers correctly", () => {
       Integer.parse("-85250259285934732937")
     )
   ).toEqual({
-    digits: new Uint32Array([
-      778201331, 3590185775, 2894594215, 2670474244, 19
+    digits: new IntegerArray([
+      243, 104, 98, 46, 47, 227, 253, 213, 167, 0, 136, 172, 4, 52, 44, 159, 19
     ]),
     negative: true
   });
@@ -309,8 +336,8 @@ it("should multiply two large different sign integers correctly", () => {
       Integer.parse("85250259285934732937")
     )
   ).toEqual({
-    digits: new Uint32Array([
-      778201331, 3590185775, 2894594215, 2670474244, 19
+    digits: new IntegerArray([
+      243, 104, 98, 46, 47, 227, 253, 213, 167, 0, 136, 172, 4, 52, 44, 159, 19
     ]),
     negative: true
   });
@@ -324,11 +351,12 @@ it("should multiply two large different sign integers correctly", () => {
       )
     )
   ).toEqual({
-    digits: new Uint32Array([
-      820722344, 484574046, 3354378088, 4080220678, 1595431319, 4149578013,
-      3899153413, 1473883865, 2241047578, 969820436, 658116215, 465669652,
-      666558595, 1384793983, 3172696170, 949661335, 3128706758, 135654673,
-      776834415, 1712207566, 7145198
+    digits: new IntegerArray([
+      168, 58, 235, 48, 94, 3, 226, 28, 104, 191, 239, 199, 6, 58, 51, 243, 151,
+      89, 24, 95, 29, 137, 85, 247, 5, 92, 104, 232, 217, 174, 217, 87, 26, 172,
+      147, 133, 20, 73, 206, 57, 119, 14, 58, 39, 20, 142, 193, 27, 131, 224,
+      186, 39, 127, 71, 138, 82, 106, 128, 27, 189, 151, 174, 154, 56, 198, 70,
+      124, 186, 17, 237, 21, 8, 111, 141, 77, 46, 206, 54, 14, 102, 238, 6, 109
     ]),
     negative: true
   });
@@ -342,11 +370,12 @@ it("should multiply two large different sign integers correctly", () => {
       )
     )
   ).toEqual({
-    digits: new Uint32Array([
-      820722344, 484574046, 3354378088, 4080220678, 1595431319, 4149578013,
-      3899153413, 1473883865, 2241047578, 969820436, 658116215, 465669652,
-      666558595, 1384793983, 3172696170, 949661335, 3128706758, 135654673,
-      776834415, 1712207566, 7145198
+    digits: new IntegerArray([
+      168, 58, 235, 48, 94, 3, 226, 28, 104, 191, 239, 199, 6, 58, 51, 243, 151,
+      89, 24, 95, 29, 137, 85, 247, 5, 92, 104, 232, 217, 174, 217, 87, 26, 172,
+      147, 133, 20, 73, 206, 57, 119, 14, 58, 39, 20, 142, 193, 27, 131, 224,
+      186, 39, 127, 71, 138, 82, 106, 128, 27, 189, 151, 174, 154, 56, 198, 70,
+      124, 186, 17, 237, 21, 8, 111, 141, 77, 46, 206, 54, 14, 102, 238, 6, 109
     ]),
     negative: true
   });
@@ -360,12 +389,14 @@ it("should multiply two large different sign integers correctly", () => {
       )
     )
   ).toEqual({
-    digits: new Uint32Array([
-      212158421, 2067594408, 1631621007, 2967018581, 1013871850, 3540769630,
-      2896856124, 2706279794, 1508766822, 761347073, 3947275763, 1408622291,
-      1327034229, 1434917399, 1433769485, 844231308, 3869138296, 3187485559,
-      514451263, 2878756793, 668143114, 4213423210, 1984018297, 215227702,
-      677382824, 64001287
+    digits: new IntegerArray([
+      213, 71, 165, 12, 168, 252, 60, 123, 143, 143, 64, 97, 85, 28, 217, 176,
+      234, 116, 110, 60, 94, 219, 11, 211, 60, 132, 170, 172, 114, 141, 78, 161,
+      102, 244, 237, 89, 1, 60, 97, 45, 243, 165, 70, 235, 211, 222, 245, 83,
+      117, 239, 24, 79, 23, 26, 135, 85, 13, 150, 117, 85, 140, 242, 81, 50,
+      120, 93, 158, 230, 119, 43, 253, 189, 63, 231, 169, 30, 185, 87, 150, 171,
+      10, 14, 211, 39, 106, 188, 35, 251, 121, 183, 65, 118, 54, 29, 212, 12,
+      168, 10, 96, 40, 7, 149, 208, 3
     ]),
     negative: true
   });
@@ -379,12 +410,14 @@ it("should multiply two large different sign integers correctly", () => {
       )
     )
   ).toEqual({
-    digits: new Uint32Array([
-      212158421, 2067594408, 1631621007, 2967018581, 1013871850, 3540769630,
-      2896856124, 2706279794, 1508766822, 761347073, 3947275763, 1408622291,
-      1327034229, 1434917399, 1433769485, 844231308, 3869138296, 3187485559,
-      514451263, 2878756793, 668143114, 4213423210, 1984018297, 215227702,
-      677382824, 64001287
+    digits: new IntegerArray([
+      213, 71, 165, 12, 168, 252, 60, 123, 143, 143, 64, 97, 85, 28, 217, 176,
+      234, 116, 110, 60, 94, 219, 11, 211, 60, 132, 170, 172, 114, 141, 78, 161,
+      102, 244, 237, 89, 1, 60, 97, 45, 243, 165, 70, 235, 211, 222, 245, 83,
+      117, 239, 24, 79, 23, 26, 135, 85, 13, 150, 117, 85, 140, 242, 81, 50,
+      120, 93, 158, 230, 119, 43, 253, 189, 63, 231, 169, 30, 185, 87, 150, 171,
+      10, 14, 211, 39, 106, 188, 35, 251, 121, 183, 65, 118, 54, 29, 212, 12,
+      168, 10, 96, 40, 7, 149, 208, 3
     ]),
     negative: true
   });

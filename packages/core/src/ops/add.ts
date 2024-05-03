@@ -1,4 +1,4 @@
-import { IntegerInternal } from "../types";
+import { IntegerArray, IntegerInternal } from "../types";
 
 export function add(
   lhs: IntegerInternal,
@@ -6,7 +6,7 @@ export function add(
   base: number
 ): IntegerInternal {
   const maxLength = Math.max(lhs.digits.length, rhs.digits.length);
-  const digits = new Uint32Array(maxLength + 1);
+  const digits = new IntegerArray(maxLength + 1);
 
   let carried = false;
   let nextCarried;

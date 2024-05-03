@@ -1,95 +1,96 @@
 import { expect, it } from "vitest";
 import { Integer } from "../src/integer";
+import { IntegerArray } from "../src/types";
 
 it("should subtract two small positive integers correctly", () => {
   expect(Integer.parse("05072003").sub(Integer.parse("05072003"))).toEqual({
-    digits: new Uint32Array([0]),
+    digits: new IntegerArray([0]),
     negative: false
   });
 
   expect(Integer.parse("0").sub(Integer.parse("0"))).toEqual({
-    digits: new Uint32Array([0]),
+    digits: new IntegerArray([0]),
     negative: false
   });
 
   expect(Integer.parse("-0").sub(Integer.parse("0"))).toEqual({
-    digits: new Uint32Array([0]),
+    digits: new IntegerArray([0]),
     negative: false
   });
 
   expect(Integer.parse("0").sub(Integer.parse("-0"))).toEqual({
-    digits: new Uint32Array([0]),
+    digits: new IntegerArray([0]),
     negative: false
   });
 
   expect(Integer.parse("-0").sub(Integer.parse("-0"))).toEqual({
-    digits: new Uint32Array([0]),
+    digits: new IntegerArray([0]),
     negative: false
   });
 
   expect(Integer.parse("18").sub(Integer.parse("0"))).toEqual({
-    digits: new Uint32Array([18]),
+    digits: new IntegerArray([18]),
     negative: false
   });
 
   expect(Integer.parse("0").sub(Integer.parse("11"))).toEqual({
-    digits: new Uint32Array([11]),
+    digits: new IntegerArray([11]),
     negative: true
   });
 
   expect(Integer.parse("18").sub(Integer.parse("-0"))).toEqual({
-    digits: new Uint32Array([18]),
+    digits: new IntegerArray([18]),
     negative: false
   });
 
   expect(Integer.parse("-0").sub(Integer.parse("11"))).toEqual({
-    digits: new Uint32Array([11]),
+    digits: new IntegerArray([11]),
     negative: true
   });
 
   expect(Integer.parse("18").sub(Integer.parse("11"))).toEqual({
-    digits: new Uint32Array([7]),
+    digits: new IntegerArray([7]),
     negative: false
   });
 
   expect(Integer.parse("11").sub(Integer.parse("18"))).toEqual({
-    digits: new Uint32Array([7]),
+    digits: new IntegerArray([7]),
     negative: true
   });
 
   expect(Integer.parse(`${2 ** 30}`).sub(Integer.parse(`${2 ** 31}`))).toEqual({
-    digits: new Uint32Array([2 ** 30]),
+    digits: new IntegerArray([0, 0, 0, 64]),
     negative: true
   });
 
   expect(Integer.parse(`${2 ** 31}`).sub(Integer.parse(`${2 ** 30}`))).toEqual({
-    digits: new Uint32Array([2 ** 30]),
+    digits: new IntegerArray([0, 0, 0, 64]),
     negative: false
   });
 });
 
 it("should subtract two small negative integers correctly", () => {
   expect(Integer.parse("-18").sub(Integer.parse("-11"))).toEqual({
-    digits: new Uint32Array([7]),
+    digits: new IntegerArray([7]),
     negative: true
   });
 
   expect(Integer.parse("-05").sub(Integer.parse("-07"))).toEqual({
-    digits: new Uint32Array([2]),
+    digits: new IntegerArray([2]),
     negative: false
   });
 
   expect(
     Integer.parse(`-${2 ** 30}`).sub(Integer.parse(`-${2 ** 31}`))
   ).toEqual({
-    digits: new Uint32Array([2 ** 30]),
+    digits: new IntegerArray([0, 0, 0, 64]),
     negative: false
   });
 
   expect(
     Integer.parse(`-${2 ** 31}`).sub(Integer.parse(`-${2 ** 30}`))
   ).toEqual({
-    digits: new Uint32Array([2 ** 30]),
+    digits: new IntegerArray([0, 0, 0, 64]),
     negative: true
   });
 });
@@ -98,9 +99,10 @@ it("should sub two large positive integers correctly", () => {
   expect(
     Integer.parse(`${2n ** 76n}`).sub(Integer.parse(`${2n ** 340n}`))
   ).toEqual({
-    digits: new Uint32Array([
-      0, 0, 4294963200, 4294967295, 4294967295, 4294967295, 4294967295,
-      4294967295, 4294967295, 4294967295, 1048575
+    digits: new IntegerArray([
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 240, 255, 255, 255, 255, 255, 255, 255, 255,
+      255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+      255, 255, 255, 255, 255, 255, 255, 255, 255, 15
     ]),
     negative: true
   });
@@ -108,9 +110,10 @@ it("should sub two large positive integers correctly", () => {
   expect(
     Integer.parse(`${2n ** 340n}`).sub(Integer.parse(`${2n ** 76n}`))
   ).toEqual({
-    digits: new Uint32Array([
-      0, 0, 4294963200, 4294967295, 4294967295, 4294967295, 4294967295,
-      4294967295, 4294967295, 4294967295, 1048575
+    digits: new IntegerArray([
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 240, 255, 255, 255, 255, 255, 255, 255, 255,
+      255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+      255, 255, 255, 255, 255, 255, 255, 255, 255, 15
     ]),
     negative: false
   });
@@ -120,7 +123,7 @@ it("should sub two large positive integers correctly", () => {
       Integer.parse("85250259285934732937")
     )
   ).toEqual({
-    digits: new Uint32Array([532279790, 1613190460]),
+    digits: new IntegerArray([238, 241, 185, 31, 60, 85, 39, 96]),
     negative: true
   });
 
@@ -129,7 +132,7 @@ it("should sub two large positive integers correctly", () => {
       Integer.parse("78321659017483256987")
     )
   ).toEqual({
-    digits: new Uint32Array([532279790, 1613190460]),
+    digits: new IntegerArray([238, 241, 185, 31, 60, 85, 39, 96]),
     negative: false
   });
 
@@ -142,9 +145,10 @@ it("should sub two large positive integers correctly", () => {
       )
     )
   ).toEqual({
-    digits: new Uint32Array([
-      520333473, 3940146323, 2280371864, 2907682727, 231191909, 629265381,
-      727233576, 97371990, 2286334609, 495612124, 476
+    digits: new IntegerArray([
+      161, 168, 3, 31, 147, 220, 217, 234, 152, 182, 235, 135, 167, 183, 79,
+      173, 101, 181, 199, 13, 229, 211, 129, 37, 40, 180, 88, 43, 86, 199, 205,
+      5, 145, 178, 70, 136, 220, 112, 138, 29, 220, 1
     ]),
     negative: false
   });
@@ -158,9 +162,10 @@ it("should sub two large positive integers correctly", () => {
       )
     )
   ).toEqual({
-    digits: new Uint32Array([
-      520333473, 3940146323, 2280371864, 2907682727, 231191909, 629265381,
-      727233576, 97371990, 2286334609, 495612124, 476
+    digits: new IntegerArray([
+      161, 168, 3, 31, 147, 220, 217, 234, 152, 182, 235, 135, 167, 183, 79,
+      173, 101, 181, 199, 13, 229, 211, 129, 37, 40, 180, 88, 43, 86, 199, 205,
+      5, 145, 178, 70, 136, 220, 112, 138, 29, 220, 1
     ]),
     negative: true
   });
@@ -174,10 +179,11 @@ it("should sub two large positive integers correctly", () => {
       )
     )
   ).toEqual({
-    digits: new Uint32Array([
-      3498841148, 926239997, 1676871269, 3646284905, 3052126673, 277092880,
-      2624733907, 3298709991, 1137090602, 2080946734, 2594476252, 615691412,
-      3446940090, 1125007689, 3906398993, 68297
+    digits: new IntegerArray([
+      60, 20, 140, 208, 253, 76, 53, 55, 101, 6, 243, 99, 105, 228, 85, 217,
+      209, 193, 235, 181, 16, 26, 132, 16, 211, 66, 114, 156, 231, 81, 158, 196,
+      42, 160, 198, 67, 46, 186, 8, 124, 220, 144, 164, 154, 148, 180, 178, 36,
+      186, 33, 116, 205, 73, 65, 14, 67, 17, 235, 214, 232, 201, 10, 1
     ]),
     negative: false
   });
@@ -191,10 +197,11 @@ it("should sub two large positive integers correctly", () => {
       )
     )
   ).toEqual({
-    digits: new Uint32Array([
-      3498841148, 926239997, 1676871269, 3646284905, 3052126673, 277092880,
-      2624733907, 3298709991, 1137090602, 2080946734, 2594476252, 615691412,
-      3446940090, 1125007689, 3906398993, 68297
+    digits: new IntegerArray([
+      60, 20, 140, 208, 253, 76, 53, 55, 101, 6, 243, 99, 105, 228, 85, 217,
+      209, 193, 235, 181, 16, 26, 132, 16, 211, 66, 114, 156, 231, 81, 158, 196,
+      42, 160, 198, 67, 46, 186, 8, 124, 220, 144, 164, 154, 148, 180, 178, 36,
+      186, 33, 116, 205, 73, 65, 14, 67, 17, 235, 214, 232, 201, 10, 1
     ]),
     negative: true
   });
@@ -208,12 +215,14 @@ it("should sub two large positive integers correctly", () => {
       )
     )
   ).toEqual({
-    digits: new Uint32Array([
-      3991767301, 3858530062, 1210394029, 3506253826, 2131183184, 739583092,
-      669266846, 1993660694, 2736025450, 1932092221, 3121170520, 1277641782,
-      3864080625, 1830857574, 3454761340, 30687737, 1327324701, 3714908025,
-      4172721637, 2911017006, 2390230797, 3800130959, 3089992701, 2055939339,
-      3965438944, 236774644
+    digits: new IntegerArray([
+      5, 137, 237, 237, 14, 127, 252, 229, 173, 37, 37, 72, 2, 48, 253, 208, 80,
+      70, 7, 127, 116, 36, 21, 44, 158, 51, 228, 39, 22, 217, 212, 118, 106,
+      111, 20, 163, 61, 99, 41, 115, 88, 72, 9, 186, 54, 68, 39, 76, 241, 48,
+      81, 230, 102, 171, 32, 109, 124, 121, 235, 205, 249, 65, 212, 1, 29, 94,
+      29, 79, 121, 255, 108, 221, 229, 173, 182, 248, 46, 152, 130, 173, 13, 7,
+      120, 142, 143, 101, 129, 226, 253, 139, 45, 184, 11, 37, 139, 122, 224,
+      203, 91, 236, 244, 228, 28, 14
     ]),
     negative: true
   });
@@ -223,9 +232,10 @@ it("should sub two large negative integers correctly", () => {
   expect(
     Integer.parse(`-${2n ** 76n}`).sub(Integer.parse(`-${2n ** 340n}`))
   ).toEqual({
-    digits: new Uint32Array([
-      0, 0, 4294963200, 4294967295, 4294967295, 4294967295, 4294967295,
-      4294967295, 4294967295, 4294967295, 1048575
+    digits: new IntegerArray([
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 240, 255, 255, 255, 255, 255, 255, 255, 255,
+      255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+      255, 255, 255, 255, 255, 255, 255, 255, 255, 15
     ]),
     negative: false
   });
@@ -233,9 +243,10 @@ it("should sub two large negative integers correctly", () => {
   expect(
     Integer.parse(`-${2n ** 340n}`).sub(Integer.parse(`-${2n ** 76n}`))
   ).toEqual({
-    digits: new Uint32Array([
-      0, 0, 4294963200, 4294967295, 4294967295, 4294967295, 4294967295,
-      4294967295, 4294967295, 4294967295, 1048575
+    digits: new IntegerArray([
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 240, 255, 255, 255, 255, 255, 255, 255, 255,
+      255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+      255, 255, 255, 255, 255, 255, 255, 255, 255, 15
     ]),
     negative: true
   });
@@ -245,7 +256,7 @@ it("should sub two large negative integers correctly", () => {
       Integer.parse("-85250259285934732937")
     )
   ).toEqual({
-    digits: new Uint32Array([532279790, 1613190460]),
+    digits: new IntegerArray([238, 241, 185, 31, 60, 85, 39, 96]),
     negative: false
   });
 
@@ -254,7 +265,7 @@ it("should sub two large negative integers correctly", () => {
       Integer.parse("-78321659017483256987")
     )
   ).toEqual({
-    digits: new Uint32Array([532279790, 1613190460]),
+    digits: new IntegerArray([238, 241, 185, 31, 60, 85, 39, 96]),
     negative: true
   });
 
@@ -267,9 +278,10 @@ it("should sub two large negative integers correctly", () => {
       )
     )
   ).toEqual({
-    digits: new Uint32Array([
-      520333473, 3940146323, 2280371864, 2907682727, 231191909, 629265381,
-      727233576, 97371990, 2286334609, 495612124, 476
+    digits: new IntegerArray([
+      161, 168, 3, 31, 147, 220, 217, 234, 152, 182, 235, 135, 167, 183, 79,
+      173, 101, 181, 199, 13, 229, 211, 129, 37, 40, 180, 88, 43, 86, 199, 205,
+      5, 145, 178, 70, 136, 220, 112, 138, 29, 220, 1
     ]),
     negative: true
   });
@@ -283,9 +295,10 @@ it("should sub two large negative integers correctly", () => {
       )
     )
   ).toEqual({
-    digits: new Uint32Array([
-      520333473, 3940146323, 2280371864, 2907682727, 231191909, 629265381,
-      727233576, 97371990, 2286334609, 495612124, 476
+    digits: new IntegerArray([
+      161, 168, 3, 31, 147, 220, 217, 234, 152, 182, 235, 135, 167, 183, 79,
+      173, 101, 181, 199, 13, 229, 211, 129, 37, 40, 180, 88, 43, 86, 199, 205,
+      5, 145, 178, 70, 136, 220, 112, 138, 29, 220, 1
     ]),
     negative: false
   });
@@ -299,10 +312,11 @@ it("should sub two large negative integers correctly", () => {
       )
     )
   ).toEqual({
-    digits: new Uint32Array([
-      3498841148, 926239997, 1676871269, 3646284905, 3052126673, 277092880,
-      2624733907, 3298709991, 1137090602, 2080946734, 2594476252, 615691412,
-      3446940090, 1125007689, 3906398993, 68297
+    digits: new IntegerArray([
+      60, 20, 140, 208, 253, 76, 53, 55, 101, 6, 243, 99, 105, 228, 85, 217,
+      209, 193, 235, 181, 16, 26, 132, 16, 211, 66, 114, 156, 231, 81, 158, 196,
+      42, 160, 198, 67, 46, 186, 8, 124, 220, 144, 164, 154, 148, 180, 178, 36,
+      186, 33, 116, 205, 73, 65, 14, 67, 17, 235, 214, 232, 201, 10, 1
     ]),
     negative: true
   });
@@ -316,10 +330,11 @@ it("should sub two large negative integers correctly", () => {
       )
     )
   ).toEqual({
-    digits: new Uint32Array([
-      3498841148, 926239997, 1676871269, 3646284905, 3052126673, 277092880,
-      2624733907, 3298709991, 1137090602, 2080946734, 2594476252, 615691412,
-      3446940090, 1125007689, 3906398993, 68297
+    digits: new IntegerArray([
+      60, 20, 140, 208, 253, 76, 53, 55, 101, 6, 243, 99, 105, 228, 85, 217,
+      209, 193, 235, 181, 16, 26, 132, 16, 211, 66, 114, 156, 231, 81, 158, 196,
+      42, 160, 198, 67, 46, 186, 8, 124, 220, 144, 164, 154, 148, 180, 178, 36,
+      186, 33, 116, 205, 73, 65, 14, 67, 17, 235, 214, 232, 201, 10, 1
     ]),
     negative: false
   });
@@ -327,52 +342,52 @@ it("should sub two large negative integers correctly", () => {
 
 it("should sub two small different sign integers correctly", () => {
   expect(Integer.parse("0").sub(Integer.parse("-18112003"))).toEqual({
-    digits: new Uint32Array([18112003]),
+    digits: new IntegerArray([3, 94, 20, 1]),
     negative: false
   });
 
   expect(Integer.parse("-18112003").sub(Integer.parse("0"))).toEqual({
-    digits: new Uint32Array([18112003]),
+    digits: new IntegerArray([3, 94, 20, 1]),
     negative: true
   });
 
   expect(Integer.parse("-05072003").sub(Integer.parse("-0"))).toEqual({
-    digits: new Uint32Array([5072003]),
+    digits: new IntegerArray([131, 100, 77]),
     negative: true
   });
 
   expect(Integer.parse("-0").sub(Integer.parse("-05072003"))).toEqual({
-    digits: new Uint32Array([5072003]),
+    digits: new IntegerArray([131, 100, 77]),
     negative: false
   });
 
   expect(Integer.parse("18112003").sub(Integer.parse("-05072003"))).toEqual({
-    digits: new Uint32Array([23184006]),
+    digits: new IntegerArray([134, 194, 97, 1]),
     negative: false
   });
 
   expect(Integer.parse("05072003").sub(Integer.parse("-18112003"))).toEqual({
-    digits: new Uint32Array([23184006]),
+    digits: new IntegerArray([134, 194, 97, 1]),
     negative: false
   });
 
   expect(Integer.parse(`${2 ** 30}`).sub(Integer.parse(`-${2 ** 31}`))).toEqual(
     {
-      digits: new Uint32Array([3 * 2 ** 30]),
+      digits: new IntegerArray([0, 0, 0, 192]),
       negative: false
     }
   );
 
   expect(Integer.parse(`${2 ** 31}`).sub(Integer.parse(`-${2 ** 30}`))).toEqual(
     {
-      digits: new Uint32Array([3 * 2 ** 30]),
+      digits: new IntegerArray([0, 0, 0, 192]),
       negative: false
     }
   );
 
   expect(Integer.parse(`-${2 ** 31}`).sub(Integer.parse(`${2 ** 30}`))).toEqual(
     {
-      digits: new Uint32Array([3 * 2 ** 30]),
+      digits: new IntegerArray([0, 0, 0, 192]),
       negative: true
     }
   );
@@ -382,14 +397,20 @@ it("should sub two large different sign integers correctly", () => {
   expect(
     Integer.parse(`${-(2n ** 76n)}`).sub(Integer.parse(`${2n ** 340n}`))
   ).toEqual({
-    digits: new Uint32Array([0, 0, 2 ** 12, 0, 0, 0, 0, 0, 0, 0, 2 ** 20]),
+    digits: new IntegerArray([
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16
+    ]),
     negative: true
   });
 
   expect(
     Integer.parse(`${2n ** 76n}`).sub(Integer.parse(`-${2n ** 340n}`))
   ).toEqual({
-    digits: new Uint32Array([0, 0, 2 ** 12, 0, 0, 0, 0, 0, 0, 0, 2 ** 20]),
+    digits: new IntegerArray([
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16
+    ]),
     negative: false
   });
 
@@ -398,7 +419,7 @@ it("should sub two large different sign integers correctly", () => {
       Integer.parse("-85250259285934732937")
     )
   ).toEqual({
-    digits: new Uint32Array([1215429412, 3724816654, 8]),
+    digits: new IntegerArray([36, 251, 113, 72, 14, 49, 4, 222, 8]),
     negative: false
   });
 
@@ -407,7 +428,7 @@ it("should sub two large different sign integers correctly", () => {
       Integer.parse("85250259285934732937")
     )
   ).toEqual({
-    digits: new Uint32Array([1215429412, 3724816654, 8]),
+    digits: new IntegerArray([36, 251, 113, 72, 14, 49, 4, 222, 8]),
     negative: true
   });
 
@@ -420,9 +441,10 @@ it("should sub two large different sign integers correctly", () => {
       )
     )
   ).toEqual({
-    digits: new Uint32Array([
-      219260785, 1130482261, 3718476559, 1521544400, 2426527137, 1342482570,
-      1759554429, 452154959, 1525087942, 1116513499, 5367
+    digits: new IntegerArray([
+      113, 167, 17, 13, 85, 202, 97, 67, 15, 115, 163, 221, 208, 236, 176, 90,
+      161, 221, 161, 144, 138, 168, 4, 80, 125, 171, 224, 104, 79, 86, 243, 26,
+      198, 254, 230, 90, 219, 164, 140, 66, 247, 20
     ]),
     negative: false
   });
@@ -436,9 +458,10 @@ it("should sub two large different sign integers correctly", () => {
       )
     )
   ).toEqual({
-    digits: new Uint32Array([
-      219260785, 1130482261, 3718476559, 1521544400, 2426527137, 1342482570,
-      1759554429, 452154959, 1525087942, 1116513499, 5367
+    digits: new IntegerArray([
+      113, 167, 17, 13, 85, 202, 97, 67, 15, 115, 163, 221, 208, 236, 176, 90,
+      161, 221, 161, 144, 138, 168, 4, 80, 125, 171, 224, 104, 79, 86, 243, 26,
+      198, 254, 230, 90, 219, 164, 140, 66, 247, 20
     ]),
     negative: true
   });
@@ -452,10 +475,11 @@ it("should sub two large different sign integers correctly", () => {
       )
     )
   ).toEqual({
-    digits: new Uint32Array([
-      3967206986, 4200628871, 4123968884, 2004744291, 639398034, 2079818402,
-      3300202435, 2280982367, 1338596419, 2853929768, 2594478126, 615691412,
-      3446940090, 1125007689, 3906398993, 68297
+    digits: new IntegerArray([
+      74, 198, 118, 236, 135, 130, 96, 250, 116, 197, 206, 245, 99, 248, 125,
+      119, 146, 112, 28, 38, 162, 130, 247, 123, 195, 23, 181, 196, 95, 7, 245,
+      135, 67, 92, 201, 79, 40, 131, 27, 170, 46, 152, 164, 154, 148, 180, 178,
+      36, 186, 33, 116, 205, 73, 65, 14, 67, 17, 235, 214, 232, 201, 10, 1
     ]),
     negative: false
   });
@@ -469,10 +493,11 @@ it("should sub two large different sign integers correctly", () => {
       )
     )
   ).toEqual({
-    digits: new Uint32Array([
-      3967206986, 4200628871, 4123968884, 2004744291, 639398034, 2079818402,
-      3300202435, 2280982367, 1338596419, 2853929768, 2594478126, 615691412,
-      3446940090, 1125007689, 3906398993, 68297
+    digits: new IntegerArray([
+      74, 198, 118, 236, 135, 130, 96, 250, 116, 197, 206, 245, 99, 248, 125,
+      119, 146, 112, 28, 38, 162, 130, 247, 123, 195, 23, 181, 196, 95, 7, 245,
+      135, 67, 92, 201, 79, 40, 131, 27, 170, 46, 152, 164, 154, 148, 180, 178,
+      36, 186, 33, 116, 205, 73, 65, 14, 67, 17, 235, 214, 232, 201, 10, 1
     ]),
     negative: true
   });

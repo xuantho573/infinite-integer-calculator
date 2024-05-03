@@ -1,15 +1,15 @@
 import { add } from "./ops/add";
 import { mul } from "./ops/mul";
 import { sub } from "./ops/sub";
-import { IntegerInternal } from "./types";
+import { IntegerInternal, IntegerArray } from "./types";
 
 export class Integer {
   private readonly negative: boolean;
-  private readonly digits: Readonly<Uint32Array>;
+  private readonly digits: Readonly<IntegerArray>;
 
-  private static base: number = 32;
+  private static base: number = 8;
 
-  private constructor(negative: boolean, digits: Readonly<Uint32Array>) {
+  private constructor(negative: boolean, digits: Readonly<IntegerArray>) {
     this.negative = negative;
     this.digits = digits;
     if (digits.length === 1 && digits[0] === 0) this.negative = false;
@@ -20,7 +20,7 @@ export class Integer {
     const negative = value.startsWith("-");
     const digits: number[] = [];
     Integer.parseHelper(negative ? value.substring(1) : value, digits);
-    return new Integer(negative, new Uint32Array(digits));
+    return new Integer(negative, new IntegerArray(digits));
   }
 
   private static parseHelper(value: string, result: number[]): void {

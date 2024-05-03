@@ -1,11 +1,11 @@
-import { IntegerInternal } from "../types";
+import { IntegerArray, IntegerInternal } from "../types";
 
 export function sub(
   lhs: IntegerInternal,
   rhs: IntegerInternal,
   base: number
 ): IntegerInternal {
-  const digits = new Uint32Array(lhs.digits.length);
+  const digits = new IntegerArray(lhs.digits.length);
 
   if (lhs.digits.length < rhs.digits.length)
     return { digits: sub(rhs, lhs, base).digits, negative: !lhs.negative };

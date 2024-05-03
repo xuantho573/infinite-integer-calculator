@@ -1,4 +1,4 @@
-import { IntegerInternal } from "../types";
+import { IntegerArray, IntegerInternal } from "../types";
 
 export function mul(
   lhs: IntegerInternal,
@@ -11,7 +11,7 @@ export function mul(
   return { digits: digits.slice(0, i + 1), negative: lhs.negative };
 }
 
-function mulNums(lhs: number, rhs: number, base: number): Uint32Array {
+function mulNums(lhs: number, rhs: number, base: number): IntegerArray {
   const max = Math.pow(2, base);
   const min = Math.pow(2, base / 2);
 
@@ -25,17 +25,17 @@ function mulNums(lhs: number, rhs: number, base: number): Uint32Array {
   const val2 =
     leftHigh * rightHigh + Math.floor(val / min) + Math.floor(val1 / max);
 
-  if (val2 > 0) return new Uint32Array([val1 % max, val2]);
-  else return new Uint32Array([val1 % max]);
+  if (val2 > 0) return new IntegerArray([val1 % max, val2]);
+  else return new IntegerArray([val1 % max]);
 }
 
 function update(
-  lhs: Uint32Array,
+  lhs: IntegerArray,
   offset: number,
-  rhs: Uint32Array,
+  rhs: IntegerArray,
   base: number
-): Uint32Array {
-  const res = new Uint32Array(Math.max(lhs.length, offset + rhs.length) + 1);
+): IntegerArray {
+  const res = new IntegerArray(Math.max(lhs.length, offset + rhs.length) + 1);
 
   const max = Math.pow(2, base) - 1;
 
@@ -71,13 +71,13 @@ function update(
 }
 
 function mulHelper(
-  lhs: Readonly<Uint32Array>,
-  rhs: Readonly<Uint32Array>,
+  lhs: Readonly<IntegerArray>,
+  rhs: Readonly<IntegerArray>,
   base: number
-): Uint32Array {
+): IntegerArray {
   const leftLength = lhs.length;
   const rightLength = rhs.length;
-  if (leftLength * rightLength === 0) return new Uint32Array(0);
+  if (leftLength * rightLength === 0) return new IntegerArray(0);
   if (leftLength * rightLength === 1) return mulNums(lhs[0], rhs[0], base);
 
   const mid = Math.ceil(Math.max(leftLength, rightLength) / 2);
