@@ -1,12 +1,11 @@
-import { calc } from "./parser";
-
 import cors from "cors";
 import express, { Request, Response } from "express";
-import ViteExpress from "vite-express";
+
+// @ts-ignore
+import { calc } from "@iic/core";
 
 const app = express();
-const port = parseInt(process.env.PORT || "3000");
-ViteExpress.config({ mode: "production" })
+const port = process.env.PORT || 3000;
 
 app.use(cors<Request>());
 app.use(express.json());
@@ -23,6 +22,6 @@ app.post("/", (req: Request, res: Response) => {
   }
 });
 
-ViteExpress.listen(app, port, () => {
+app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
