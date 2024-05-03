@@ -64,7 +64,7 @@ application:
 
 ```bash
 cd packages/server
-pnpm start
+pnpm build && pnpm start
 ```
 
 - Then create a new terminal instance at the project's root directory and run
