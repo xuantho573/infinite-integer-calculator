@@ -47,11 +47,11 @@ and you are good to go.
 
 ## Build
 
-We need to build the packages before running them. Run the following command to
-build the packages:
+We need to build the core package since the server package needs it as a
+dependency. Run the following command to build the package:
 
 ```bash
-pnpm build
+pnpm -F "@iic/core" build
 ```
 
 ## Run
@@ -72,7 +72,7 @@ pnpm build && pnpm start
 
 ```bash
 cd packages/ui
-pnpm preview
+pnpm dev
 ```
 
 - The terminal will then show the host address and port of the ui, click it to
