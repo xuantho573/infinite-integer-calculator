@@ -94,26 +94,34 @@ Infinite Integer Calculator is licensed under the [Apache 2.0 License](LICENSE).
 📦 core
  ┗📦 src
    ┣📂 ops          # Include logic handlers for arithmetic operations
+   ┣📜 index.ts     # Export class Integer and calc function
    ┣📜 integer.ts   # Class Integer representing an infinite integer
    ┣📜 parser.ts    # Utilities for parsing expressions
-   ┣📜 server.ts    # Http server
    ┗📜 types.ts     # Types and interfaces for annotation
+```
+
+### Server package
+
+```
+📦 server
+ ┗📦 src
+   ┗📜 index.ts    # Main entry for the HTTP server
 ```
 
 ### UI package
 
 ```
 📦 ui
- ┣📦 src
- ┃ ┣📂 assets         # Contains static assets
- ┃ ┣📂 components     # Main components of the application
- ┃ ┣📂 customHooks    # Custom hooks
- ┃ ┣📂 store          # Redux store implementation
- ┃ ┣📜 App.css        # Main css implementation
- ┃ ┣📜 App.tsx        # Application container
- ┃ ┣📜 index.css      # Root css
- ┃ ┗📜 main.tsx       # Entry point
- ┗📜 index.html       # Root html page
+ ┣📜 index.html       # Root html page
+ ┗📦 src
+   ┣📂 assets         # Contains static assets
+   ┣📂 components     # Main components of the application
+   ┣📂 customHooks    # Custom hooks
+   ┣📂 store          # Redux store implementation
+   ┣📜 App.css        # Main css implementation
+   ┣📜 App.tsx        # Application container
+   ┣📜 index.css      # Root css
+   ┗📜 main.tsx       # Entry point
 ```
 
 ---
