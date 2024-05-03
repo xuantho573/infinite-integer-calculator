@@ -141,8 +141,8 @@ digits and calculate the expressions on the arrays instead.
 Using single numbers as digits leads to inefficient use of memory since they
 don't use all the space allocated for numbers.
 
-Therefore, we will convert the base from decimal to base $2^{32}$ and treat a
-digit as 4-byte binary data. We will call the data structure representing the
+Therefore, we will convert the base from decimal to base $2^{8}$ and treat a
+digit as 1-byte binary data. We will call the data structure representing the
 infinite integers in our system `Integer`. It contains an array of binary data
 represent the digits and a boolean variable indicating whether the number is
 negative or not. The class also has a static property representing the bit
@@ -151,8 +151,8 @@ numbers of the base of the converted integers.
 ```ts
 class Integer {
   private readonly negative: boolean;
-  private readonly digits: Readonly<Uint32Array>;
-  private static base: number = 32; // 32-bit integer
+  private readonly digits: Readonly<IntegerArray>;
+  private static base: number = 8; // 8-bit integer
 }
 ```
 
@@ -177,7 +177,7 @@ function decToBinary(n: number) {
 ```
 
 This is a very simple implementation to convert a decimal number to a binary
-string. We could also convert the input integers to base $2^{32}$ using this
+string. We could also convert the input integers to base $2^{8}$ using this
 algorithm. However, we cannot start with the whole integer since it will cause
 overflow. Therefore, we need another solution.
 
@@ -207,7 +207,7 @@ outcome of digit additions. The steps of the algorithm is demonstrated below:
    `Integer` if it exists, else we assign 0 to the result.
 2. If there is a carry from the previous iteration, then we need to increase the
    result by 1. However, we need to check if the result is currently the maximum
-   value, which is $2^{32} - 1$, then we need to assign 0 to the result and flag
+   value, which is $2^{8} - 1$, then we need to assign 0 to the result and flag
    the carry for the next iteration to `true` instead.
 3. We then compute the difference between the maximum value and the current
    result and compare it with the digit from the second `Integer` (if exists).
@@ -299,36 +299,36 @@ For multiplication operations, the product of two digits may exceed the maximum
 value for a digit, which will cause loss of data. We can solve this problem by
 splitting digits into two parts: high bits and low bits. Let's say that we have
 two `Integer` $int_1$ and $int_2$. After splitting them, we get
-$int_1 = high_1 * 2 ^ {16} + low_1$ and $int_2 = high_2 * 2 ^ {16} + low_2$
-Let's transform the expression $int_1 * int_2$:
+$int_1 = high_1 * 2 ^ {4} + low_1$ and $int_2 = high_2 * 2 ^ {4} + low_2$ Let's
+transform the expression $int_1 * int_2$:
 
 $$
-int_1 * int_2 = (high_1 * 2 ^ {16} + low_1) * (high_2 * 2 ^ {16} + low_2)
+int_1 * int_2 = (high_1 * 2 ^ {4} + low_1) * (high_2 * 2 ^ {4} + low_2)
 $$
 
 $$
-= high_1 * high_2 * 2 ^ {32} + (high_1 * low_2 + high_2 * low_1) * 2 ^ {16} + low_1 * low_2
+= high_1 * high_2 * 2 ^ {8} + (high_1 * low_2 + high_2 * low_1) * 2 ^ {4} + low_1 * low_2
 $$
 
 We can see that the result of the first summand of the last equation will not
 affect the result digit at the current position, but rather the next position
-since it is left-shifted by 32 bits. We can also see that only the last 16 bits
-of the second summand affect the result digit, since it is left-shifted by 16
-bits. So the result digit will be equal to
+since it is left-shifted by 8 bits. We can also see that only the last 4 bits of
+the second summand affect the result digit, since it is left-shifted by 4 bits.
+So the result digit will be equal to
 
 $$
-(low_1 * low_2 + ((high_1 * low_2 + high_2 * low_1) \mod 2^{16}) * 2 ^ {16} + C) \mod 2 ^ {32}
+(low_1 * low_2 + ((high_1 * low_2 + high_2 * low_1) \mod 2^{4}) * 2 ^ {4} + C) \mod 2 ^ {8}
 $$
 
 , where $C$ is the carry from the previous iteration, and the carry for the next
 iteration is equal to
 
-$$high_1*high_2+floor((high_1 * low_2 + high_2 * low_1)/2^{16})$$
+$$high_1*high_2+floor((high_1 * low_2 + high_2 * low_1)/2^{4})$$
 
-However, if the value before getting $\mod 2^{32}$ of the current digit is
-larger than the max value, then we need to increase the carry for the next
-iteration by 1. To avoid overflow, we will use the algorithm discussed above to
-add two numbers.
+However, if the value before getting $\mod 2^{8}$ of the current digit is larger
+than the max value, then we need to increase the carry for the next iteration
+by 1. To avoid overflow, we will use the algorithm discussed above to add two
+numbers.
 
 That is for the multiplication between two digits. For multiplication of two
 arrays of digits, we have to consider the position of each digits in the two
