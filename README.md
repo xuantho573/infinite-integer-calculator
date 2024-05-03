@@ -45,7 +45,16 @@ the calculation service.
 You just need to rename the file `example.env` in the `ui` directory to `.env`
 and you are good to go.
 
-## Running
+## Build
+
+We need to build the packages before running them. Run the following command to
+build the packages:
+
+```bash
+pnpm build
+```
+
+## Run
 
 Once you've got all things set up, you can follow the steps below to run the
 application:
@@ -55,7 +64,7 @@ application:
 
 ```bash
 cd packages/server
-pnpm dev:server
+pnpm start
 ```
 
 - Then create a new terminal instance at the project's root directory and run
@@ -63,8 +72,11 @@ pnpm dev:server
 
 ```bash
 cd packages/ui
-pnpm dev
+pnpm preview
 ```
+
+- The terminal will then show the host address and port of the ui, click it to
+  open the application in the browser
 
 ---
 
